@@ -25,6 +25,13 @@ type tmp\stdout.txt
 :setup
 python %GENERATE_PTH%
 
+REM Check if setuptools version is 69.5.1, if not install the correct version
+for /f "tokens=2 delims== " %%i in ('pip show setuptools ^| findstr Version') do set CURRENT_SETUPTOOLS_VERSION=%%i
+if "%CURRENT_SETUPTOOLS_VERSION%" neq "69.5.1" (
+    echo Installing setuptools==69.5.1...
+    pip install setuptools==69.5.1
+)
+
 REM Check if ffmpy is installed
 python -c "import ffmpy" 2>NUL
 IF %ERRORLEVEL% NEQ 0 (
