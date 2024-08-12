@@ -2,14 +2,6 @@
 
 call environment.bat
 
-REM Check whether the file path contains spaces or Chinese characters
-for %%i in ("%~dp0") do (
-    echo %%~fi | findstr /r /c:"[^\x20-\x7E]" >nul && (
-        echo !!!The file path contains spaces or Chinese characters. Please move to a path without spaces or Chinese characters before executing.!!!
-        exit /b 1
-    )
-)
-
 python -mpip --help
 if %ERRORLEVEL% == 0 goto :setup
 if "%PIP_INSTALLER_LOCATION%" == "" goto :show_stdout_stderr
