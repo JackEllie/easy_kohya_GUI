@@ -2,6 +2,14 @@
 
 call environment.bat
 
+REM Check whether the file path contains spaces or Chinese characters
+for %%i in ("%~dp0") do (
+    echo %%~fi | findstr /r /c:"[^\x20-\x7E]" >nul && (
+        echo !!!The file path contains spaces or Chinese characters. Please move to a path without spaces or Chinese characters before executing.!!!
+        exit /b 1
+    )
+)
+
 python -mpip --help
 if %ERRORLEVEL% == 0 goto :setup
 if "%PIP_INSTALLER_LOCATION%" == "" goto :show_stdout_stderr
@@ -24,15 +32,6 @@ type tmp\stdout.txt
 
 :setup
 python %GENERATE_PTH%
-
-REM Check if ffmpy is installed
-python -c "import ffmpy" 2>NUL
-IF %ERRORLEVEL% NEQ 0 (
-    echo ffmpy is not installed. Installing...
-    cd %~dp0system\python\ffmpy-0.3.2
-    pip install .
-)
-
 
 cd %~dp0kohya_ss
 
